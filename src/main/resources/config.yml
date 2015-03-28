@@ -1,0 +1,47 @@
+## YAML Template.
+---
+Effects:
+    Burn:
+        EffectId: BurnEffect
+        Name: '%+BurnChance%% Burn-Chance (%BurnTime% sec)'
+        EffectConfig:
+            BurnChance: 20
+            BurnTime: 5
+    Level:
+        EffectId: LevelEffect
+        Name: 'Level %Level%'
+        EffectConfig:
+            Level: 5
+    Dodge:
+        EffectId: DodgeEffect
+        Name: '%+DodgeChance%% Dodge'
+        EffectConfig:
+            DodgeChance: 10
+    FireResist:
+        EffectId: ResistanceEffect
+        Name: '%+ResistAmount% Fire Resistance'
+        EffectConfig:
+            ResistType: FIRE
+            ResistAmount: 0.5
+    WitherResist:
+        EffectId: ResistanceEffect
+        Name: '%+ResistAmount% Wither Resistance'
+        EffectConfig:
+            ResistType: WITHER
+            ResistAmount: 0.5
+    PoisonResist:
+        EffectId: ResistanceEffect
+        Name: '%+ResistAmount% Poison Resistance'
+        EffectConfig:
+            ResistType: POISON
+            ResistAmount: 0.5
+    Health:
+        EffectId: HealthEffect
+        Name: '%+Health% Health'
+        EffectConfig:
+            Health: 10
+    Defense:
+        EffectId: DefenseEffect
+        Name: '%+Defense% Defense'
+        EffectConfig:
+            Defense: 5

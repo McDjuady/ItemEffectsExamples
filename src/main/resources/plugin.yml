@@ -1,0 +1,7 @@
+## YAML Template.
+---
+name: ItemEffectsExamples
+author: McDjuady
+main: com.googlemail.mcdjuady.itemeffects.example.ExamplePlugin
+version: 1.0
+depend: [ItemEffects]
