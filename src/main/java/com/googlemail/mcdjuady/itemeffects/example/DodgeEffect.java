@@ -10,6 +10,7 @@ import com.googlemail.mcdjuady.itemeffects.effect.EffectData;
 import com.googlemail.mcdjuady.itemeffects.effect.EffectDataOption;
 import com.googlemail.mcdjuady.itemeffects.effect.EffectHandler;
 import com.googlemail.mcdjuady.itemeffects.effect.EffectOptions;
+import com.googlemail.mcdjuady.itemeffects.effect.PlayerEffects;
 import java.util.Random;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -28,15 +29,15 @@ import org.bukkit.inventory.ItemStack;
 public class DodgeEffect extends Effect{
     
     private final Random random = new Random();
-    
-    public DodgeEffect(ConfigurationSection effectConfig, ItemStack item, String lore) throws InvalidConfigurationException {
-        super(effectConfig, item, lore);
+
+    public DodgeEffect(ConfigurationSection effectConfig, String effectInfo, PlayerEffects parentEffects, int slot) throws InvalidConfigurationException {
+        super(effectConfig, effectInfo, parentEffects, slot);
     }
 
     @EffectHandler
-    public void onEntityDamage(EffectData data, Player player, EntityDamageByEntityEvent e) {
-        if (e.getEntity().equals(player)) {
-            double chance = data.getDouble("DodgeChance");
+    public void onEntityDamage(EntityDamageByEntityEvent e) {
+        if (!getPlayer().equals(getAttacker(e))) {
+            double chance = getEffectData().getDouble("DodgeChance");
             if (chance > random.nextInt(100)) {
                 e.setCancelled(true);
             }

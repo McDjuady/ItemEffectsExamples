@@ -11,6 +11,7 @@ import com.googlemail.mcdjuady.itemeffects.effect.EffectDataMaxCombiner;
 import com.googlemail.mcdjuady.itemeffects.effect.EffectDataOption;
 import com.googlemail.mcdjuady.itemeffects.effect.EffectHandler;
 import com.googlemail.mcdjuady.itemeffects.effect.EffectOptions;
+import com.googlemail.mcdjuady.itemeffects.effect.PlayerEffects;
 import java.util.Random;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
@@ -19,7 +20,6 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemStack;
 
 /**
  *
@@ -32,13 +32,15 @@ public class BurnEffect extends Effect {
 
     private final Random random = new Random();
 
-    public BurnEffect(ConfigurationSection effectConfig, ItemStack item, String lore) throws InvalidConfigurationException {
-        super(effectConfig, item, lore);
+    public BurnEffect(ConfigurationSection effectConfig, String effectInfo, PlayerEffects parentEffects, int slot) throws InvalidConfigurationException {
+        super(effectConfig, effectInfo, parentEffects, slot);
     }
 
     @EffectHandler
-    public void onEntityDamageByEntity(EffectData data, Player player, EntityDamageByEntityEvent event) {
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         Bukkit.getLogger().info("BurnEffect");
+        Player player = getPlayer();
+        EffectData data = getEffectData();
         if (!player.equals(event.getDamager())) {
             return;
         }

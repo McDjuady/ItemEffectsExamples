@@ -10,6 +10,7 @@ import com.googlemail.mcdjuady.itemeffects.effect.EffectData;
 import com.googlemail.mcdjuady.itemeffects.effect.EffectDataOption;
 import com.googlemail.mcdjuady.itemeffects.effect.EffectHandler;
 import com.googlemail.mcdjuady.itemeffects.effect.EffectOptions;
+import com.googlemail.mcdjuady.itemeffects.effect.PlayerEffects;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -24,14 +25,16 @@ import org.bukkit.inventory.ItemStack;
     @EffectDataOption(key = "Amount", dataClass = Integer.class, value = "5")})
 public class AttackEffect extends Effect {
 
-    public AttackEffect(ConfigurationSection effectConfig, ItemStack item, String lore) throws InvalidConfigurationException {
-        super(effectConfig, item, lore);
+    public AttackEffect(ConfigurationSection effectConfig, String effectInfo, PlayerEffects parentEffects, int slot) throws InvalidConfigurationException {
+        super(effectConfig, effectInfo, parentEffects, slot);
     }
 
+    
+
     @EffectHandler
-    public void onEntityDamageByEntity(EffectData data, Player player, EntityDamageByEntityEvent event) {
-        if (event.getDamager().equals(player)) {
-            event.setDamage(event.getDamage() + data.getInt("Amount"));
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (event.getDamager().equals(getPlayer())) {
+            event.setDamage(event.getDamage() + getEffectData().getInt("Amount"));
         }
     }
 

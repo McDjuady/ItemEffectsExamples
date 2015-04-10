@@ -12,6 +12,7 @@ import com.googlemail.mcdjuady.itemeffects.effect.EffectHandler;
 import com.googlemail.mcdjuady.itemeffects.effect.EffectOptions;
 import com.googlemail.mcdjuady.itemeffects.ItemEffects;
 import com.googlemail.mcdjuady.itemeffects.effect.EffectDataMaxCombiner;
+import com.googlemail.mcdjuady.itemeffects.effect.PlayerEffects;
 import com.googlemail.mcdjuady.itemeffects.event.GlobalActivateEvent;
 import com.googlemail.mcdjuady.itemeffects.event.GlobalDeactivateEvent;
 import com.googlemail.mcdjuady.itemeffects.event.GlobalUpdateEvent;
@@ -43,11 +44,11 @@ public class LevelEffect extends Effect {
             this.player = player;
             this.desiredLevel = globalData.getInt("Level");
         }
-        
+
         public void updateData(EffectData newData) {
             this.desiredLevel = newData.getInt("Level");
         }
-        
+
         @Override
         public void run() {
             if (!player.isOnline() || desiredLevel <= player.getLevel()) {
@@ -62,22 +63,22 @@ public class LevelEffect extends Effect {
 
     private EffectTask task;
 
-    public LevelEffect(ConfigurationSection effectConfig, ItemStack item, String lore) throws InvalidConfigurationException {
-        super(effectConfig, item, lore);
+    public LevelEffect(ConfigurationSection effectConfig, String effectInfo, PlayerEffects parentEffects, int slot) throws InvalidConfigurationException {
+        super(effectConfig, effectInfo, parentEffects, slot);
     }
-    
+
     @EffectHandler
-    public void onActivate(EffectData data, Player player, GlobalActivateEvent e) {
+    public void onActivate(GlobalActivateEvent e) {
         int requiredLevel = e.getGlobalData().getInt("Level");
-        int playerLevel = player.getLevel();
+        int playerLevel = getPlayer().getLevel();
         if (requiredLevel > playerLevel) {
-            task = new EffectTask(e.getGlobalData(), player);
+            task = new EffectTask(e.getGlobalData(), getPlayer());
             task.runTaskTimer(ItemEffects.getInstance(), 0, 10);
         }
     }
 
     @EffectHandler
-    public void onUpdate(EffectData data, Player player, GlobalUpdateEvent e) {
+    public void onUpdate(GlobalUpdateEvent e) {
         //if we have a task update the data to the recombined global data
         if (task != null) {
             task.updateData(e.getGlobalData());
@@ -85,17 +86,17 @@ public class LevelEffect extends Effect {
         //only update if the task is not running
         if (task == null || (!Bukkit.getScheduler().isQueued(task.getTaskId()) && !Bukkit.getScheduler().isCurrentlyRunning(task.getTaskId()))) {
             int requiredLevel = e.getGlobalData().getInt("Level");
-            int playerLevel = player.getLevel();
+            int playerLevel = getPlayer().getLevel();
             if (requiredLevel > playerLevel) {
-                task = new EffectTask(e.getGlobalData(), player);
+                task = new EffectTask(e.getGlobalData(), getPlayer());
                 task.runTaskTimer(ItemEffects.getInstance(), 0, 10);
             }
         }
-        
+
     }
 
     @EffectHandler
-    public void onDeactivate(EffectData data, Player player, GlobalDeactivateEvent e) {
+    public void onDeactivate(GlobalDeactivateEvent e) {
         if (task != null) {
             Bukkit.getScheduler().cancelTask(task.getTaskId());
         }
